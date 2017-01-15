@@ -22,8 +22,41 @@
  
 
 </div> 
+<h4>Pengeluaran</h4>
+<div class="panel box-v3">
+          <div class="panel-heading bg-white border-none">      
+                    <table id="datatables-example" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Biaya</th>
+               
+                        </tr>
+                        <tr>
+                         <?php
+                        $no = 0;
+                        foreach ($listpengeluaran as $data_user) {
+                            $no++; ?>
+                            <td><?php echo $no; ?> </td>
+                            <td><?php echo $data_user->NAMA_LENGKAP_USER; ?> </td>
+                            <td><?php echo $data_user->BIAYA; ?> </td>
+                                
+                        </tr>
+                        <?php } ?>              
+                         <tr>
+                         <?php
+                        $no = 0;
+                        foreach ($hasilpengeluaran as $data_user) {
+                            $no++; ?>
 
-
+                            <td><?php echo $data_user->BIAYA; ?> </td>
+                                
+                        </tr>
+                        <?php } ?>                  
+                    </table>
+       
+      </div>
+     </div>
               <h4>Report</h4>
 
                    
