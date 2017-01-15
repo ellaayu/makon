@@ -21,7 +21,7 @@ class Home extends CI_Controller {
         $isi['listjumat'] = $this->Model_data_tugas->jumat();
         $isi['listsabtu'] = $this->Model_data_tugas->sabtu();
         $isi['listminggu'] = $this->Model_data_tugas->minggu();
-        
+        $isi['listpengeluaran'] = $this->Model_data_keuangan->pengeluaran();
 		$this->load->view('tampilan_home',$isi); 
         
 	}
