@@ -43,16 +43,8 @@
                                 
                         </tr>
                         <?php } ?>              
-                         <tr>
-                         <?php
-                        $no = 0;
-                        foreach ($hasilpengeluaran as $data_user) {
-                            $no++; ?>
-
-                            <td><?php echo $data_user->BIAYA; ?> </td>
-                                
-                        </tr>
-                        <?php } ?>                  
+       
+             
                     </table>
        
       </div>
