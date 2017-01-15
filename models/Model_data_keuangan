@@ -1,0 +1,119 @@
+<?php
+class Model_data_keuangan extends CI_Model{
+
+    
+    function get_id_kategori($id){
+$sql = "select * from tbl_keuangan where id_keuangan = ?";
+$hasil = $this->db->query($sql, $id);
+return $hasil->result();
+}
+
+    public function get_all(){
+        
+        $this->db->select('TBL_KEUANGAN.ID_KEUANGAN');
+        $this->db->select('NAMA_LENGKAP_USER');
+        $this->db->select('JENIS_KEUANGAN');
+        $this->db->select('BIAYA');
+        $this->db->select('TGL');
+        $this->db->select('DETAIL_KEUANGAN');
+        $this->db->from('TBL_USER','TBL_KEUANGAN','DETAIL_KEUANGAN');
+        $this->db->join('DETAIL_KEUANGAN','TBL_USER.ID_USER = DETAIL_KEUANGAN.ID_USER');
+        $this->db->join('TBL_KEUANGAN','TBL_KEUANGAN.ID_KEUANGAN = DETAIL_KEUANGAN.ID_KEUANGAN');
+        return $this->db->get()->result();
+
+    }
+    
+    public function pengeluaran(){
+        $this->db->select('NAMA_LENGKAP_USER');
+        $this->db->select('BIAYA');
+        $this->db->from('TBL_USER','TBL_KEUANGAN','DETAIL_KEUANGAN');
+        $this->db->join('DETAIL_KEUANGAN','TBL_USER.ID_USER = DETAIL_KEUANGAN.ID_USER');
+        $this->db->join('TBL_KEUANGAN','TBL_KEUANGAN.ID_KEUANGAN = DETAIL_KEUANGAN.ID_KEUANGAN');
+        $this->db->where('TGL BETWEEN "2017-01-01" and "2017-12-31"');
+                return $this->db->get()->result();
+    }
+    public function hasilpengeluaran(){
+        $this->db->select('SUM(BIAYA)');
+        $this->db->from('TBL_USER','TBL_KEUANGAN','DETAIL_KEUANGAN');
+        $this->db->join('DETAIL_KEUANGAN','TBL_USER.ID_USER = DETAIL_KEUANGAN.ID_USER');
+        $this->db->join('TBL_KEUANGAN','TBL_KEUANGAN.ID_KEUANGAN = DETAIL_KEUANGAN.ID_KEUANGAN');
+        $this->db->where('TGL BETWEEN "2017-01-01" and "2017-12-31"');
+                return $this->db->get()->result();
+    }
+
+    public function get_tugas()
+    {
+       return $this->db->get('TBL_TUGAS')->result();
+    }
+
+    /* Fungsi ini me return satu record dari tabeluser dalam bentuk object. 
+     * Record yang di return adalah record dengan id $id_user 
+     */
+    public function get_one($id_detail_keuangan){
+        $this->db->select('TBL_KEUANGAN.ID_KEUANGAN');
+        $this->db->select('ID_DETAIL_KEUANGAN');
+        $this->db->select('NAMA_LENGKAP_USER');
+        $this->db->select('JENIS_KEUANGAN');
+        $this->db->select('BIAYA');
+        $this->db->select('TGL');
+        $this->db->select('DETAIL_KEUANGAN');
+        $this->db->from('TBL_USER','TBL_KEUANGAN','DETAIL_KEUANGAN');
+        $this->db->join('DETAIL_KEUANGAN','TBL_USER.ID_USER = DETAIL_KEUANGAN.ID_USER');
+        $this->db->join('TBL_KEUANGAN','TBL_KEUANGAN.ID_KEUANGAN = DETAIL_KEUANGAN.ID_KEUANGAN');
+        $this->db->where('ID_DETAIL_KEUANGAN',$id_detail_keuangan);
+        return $this->db->get()->result();
+    }
+
+   
+    /* Fungsi ini menginsertkan data ke dalam tabel user.
+     * Parameter $data berisi data yang akan diinsertkan dalam bentuk associative array
+     * yang terdiri dari pasangan key=>value. Key adalan nama field, sedangkan value adalah
+     * nilai field
+     */
+    public function insert_keuangan($data_uang){
+        $this->db->insert('TBL_KEUANGAN', $data_uang);        
+    }
+
+    public function insert_detail_keuangan($data_detail_uang){
+        $this->db->insert('DETAIL_KEUANGAN', $data_detail_uang);        
+    }
+
+    public function get_last_id_keuangan(){
+        $sql=$this->db->query("SELECT MAX(ID_KEUANGAN) as id_keuangan FROM TBL_KEUANGAN");
+        return $sql->row_array();      
+    }
+
+    /* Fungsi ini mengupdate data ke dalam tabel user yang memiliki id=$id_user.
+     * Parameter $data berisi data yang akan diinsertkan dalam bentuk associative array
+     * yang terdiri dari pasangan key=>value. Key adalan nama field, sedangkan value adalah
+     * nilai field
+     */
+    public function atur_tugas($data){
+        $this->db->insert('DETAIL_TUGAS', $data);
+    }
+
+    public function update_keuangan($data, $id_keuangan){
+        $this->db->where('ID_KEUANGAN', $id_keuangan);
+        $this->db->update('TBL_KEUANGAN', $data);
+    }
+
+    public function update_detail_keuangan($data, $id_detail_keuangan){
+        $this->db->where('ID_DETAIL_KEUANGAN', $id_detail_keuangan);
+        $this->db->update('DETAIL_KEUANGAN', $data);
+    }
+
+    /* Fungsi ini menghapus satu record dari tabel user memiliki id=$id_user*/
+    public function delete($id_detail_keuangan){
+        $this->db->delete('DETAIL_KEUANGAN', array('ID_DETAIL_KEUANGAN' => $id_detail_keuangan));
+    }
+
+    function get($keyword){
+	   $this->load->database();        
+	   return $this->db->select('*')->from('TBL_USER')
+           ->like('NAMA_LENGKAP_USER',$keyword)->or_like('USERNAME',$keyword)
+           ->get()->result();
+    }
+
+}
+
+
